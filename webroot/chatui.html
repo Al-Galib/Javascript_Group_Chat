@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+          <title>Chat NodeJS App</title>
+          <link rel="stylesheet" href="./styles/style.css" />
+          <script src="./scripts/jquery.js"></script>
+          <script src="./scripts/socket.io.js"></script>
+          <script src="./scripts/socket.io-file-client.js"></script>
+          <script>
+               $(document).ready(() => {
+                    $("#trigger").click(() => {
+                         $("#nav").toggleClass("responsive");
+                    });
+                    /////////Socket
+                    /////////////////////////////////
+                    $("#ui").hide();
+                    $("#un").hide();
+                    $("#gs").hide();
+                    $("#mi").hide();
+                    $("#ms").hide();
+                    var socket = io.connect("http://localhost:9000");
+                    socket.on("connect", () => {
+                         console.log("connected");
+                         $('#snackbar').html('connected');
+                         $('#snackbar').toggleClass('show');
+                         setTimeout(()=>{
+                              $('#snackbar').toggleClass('show');
+                         }, 3000);
+                         $("#ui").show();
+                    });
+                    socket.on("init", (data) => {
+                         $("#ui").hide();
+                         $("#u").html(data.user);
+                         $("#un").show();
+                         //console.log(data)
+                         $("#g").empty();
+                         data.rooms.forEach((v) => {
+                              $("#g").append(
+                                   `<option value='${v}'>${v}</option>`
+                              );
+                         });
+                         $("#g").append(
+                              `<option value="" selected>Select group</option>`
+                         );
+                         $("#gs").show();
+                    });
+                    socket.on("joinSuccess", (m) => {
+                         $("#ms").show();
+                         $("#mi").show();
+                         $("#gn").html($("#g").val());
+                    });
+                    socket.on("leaveSuccess", (m) => {
+                         $("#gm").empty();
+                         $("#m").empty();
+                         $("#gn").html(m.g);
+                    });
+                    socket.on("userlist", (users) => {
+                         var u = $("#u").html();
+                         $("#gm").empty();
+                         users.forEach((v, i) => {
+                              if (v == u)
+                                   $("#gm").append(
+                                        `<li class="l-i active">${v}</li>`
+                                   );
+                              else $("#gm").append(`<li class="l-i">${v}</li>`);
+                         });
+                    });
+                    socket.on("glist", (gs) => {
+                         $('#snackbar').html('Group list changed');
+                         $('#snackbar').toggleClass('show');
+                         setTimeout(()=>{
+                              $('#snackbar').toggleClass('show');
+                         }, 3000);
+                         var gn = $("#gn").html();
+                         var s = "";
+                         $("#g").empty();
+                         gs.forEach((v) => {
+                              s = gn == v ? "slected" : "";
+                              $("#g").append(
+                                   `<option value='${v}' ${s}>${v}</option>`
+                              );
+                         });
+                         $("#g").append(
+                              `<option value="" ${
+                                   gn == "" ? "slected" : ""
+                              }>Select group</option>`
+                         );
+                         $("#tg").val("");
+                    });
+                    socket.on("message", (data) => {
+                         var u = $("#u").html();
+                         //console.log(data);
+                         if (data.from == u) {
+                              $("#m").append(
+                                   `<li class="l-i active">You: ${data.msg}</li>`
+                              );
+                         } else {
+                              $("#m").append(
+                                   `<li class="l-i">${data.from}: ${data.msg}</li>`
+                              );
+                         }
+                    });
+                    socket.on("uploaded", (data) => {
+			          console.log('uploaded');
+                         var u = $("#u").html();
+                         if (data.from != u) {
+                              $("#m").append(
+                                   `<li class="l-i">${data.from}: ${data.msg}</li>`
+                              );
+                         }
+                    });
+                    var uploader = new SocketIOFileClient(socket);
+                    var form = document.getElementById("form");
+                    uploader.on("start", function (fileInfo) {
+                         console.log("Start uploading", fileInfo);
+                    });
+                    uploader.on("stream", function (fileInfo) {
+                         console.log(
+                              "Streaming... sent " + fileInfo.sent + " bytes."
+                         );
+                    });
+                    uploader.on("complete", function (fileInfo) {
+                         $("#m").append(
+                              `<li class="l-i active">You: You uploaded: ${fileInfo.originalFileName}</li>`
+                         );
+                    });
+                    uploader.on("error", function (err) {
+                         console.log("Error!", err);
+                    });
+                    uploader.on("abort", function (fileInfo) {
+                         console.log("Aborted: ", fileInfo);
+                    });
+                    $("#c").click(() => {
+                         if ($("#tu").val() != "") {
+                              socket.emit("signin", $("#tu").val());
+                         }
+                    });
+                    $("#j").click(() => {
+                         if ($("#g").val() != "")
+                              socket.emit("join", $("#g").val());
+                    });
+                    $("#cr").click(() => {
+                         $("#gn").html($("#tg").val());
+                         if ($("#tg").val() != "")
+                              socket.emit("create", $("#tg").val());
+                    });
+                    $("#s").click(() => {
+                         if ($("#tm").val() != "") {
+                              socket.emit("send", $("#tm").val());
+                              $("#tm").val("");
+                         }
+                    });
+                    $("#up").click(() => {
+                         $("#file").trigger("click");
+                    });
+                    $("#file").change(() => {
+                         var fileEl = document.getElementById("file");
+                         var uploadIds = uploader.upload(fileEl);
+                    });
+               });
+          </script>
+     </head>
+     <body>
+          <nav id="nav">
+               <a href="./index.html" class="brand">Chat: Socket.io</a>
+               <a href="javascript:void(0)" class="icon"
+                    ><i class="fa fa-bars" id="trigger"></i
+               ></a>
+               <a href="./index.html">Home</a>
+
+               <a href="./chatui.html">Chat</a>
+          </nav>
+          <div class="container">
+               <div class="r mt" id="ui">
+                    <div class="c-4">
+                         <input
+                              type="text"
+                              placeholder="Username"
+                              id="tu"
+                              class="input"
+                         /><button class="btn" id="c">Connect</button>
+                    </div>
+               </div>
+               <div class="r my" id="un">
+                    <div class="c-1" style="padding-left: 5px">Username:</div>
+                    <div class="c-3"><span id="u"></span></div>
+               </div>
+               <div class="r my" id="gs">
+                    <div class="c-2">
+                         <select class="input" id="g">
+                              <option value="" selected>Select</option>
+                         </select>
+                         <button class="btn" id="j">Join</button>
+                    </div>
+                    <div class="c-2">
+                         <input
+                              type="text"
+                              placeholder="Gropu name"
+                              id="tg"
+                              class="input"
+                         /><button class="btn" id="cr">Create</button>
+                    </div>
+               </div>
+               <div class="r my" id="mi">
+                    <div class="c-4">
+                         <input
+                              type="text"
+                              placeholder="Message"
+                              id="tm"
+                              class="input"
+                         /><button class="btn" id="s">send</button>
+                         <button class="btn" id="up">
+                              <i class="fa fa-file"></i>
+                         </button>
+                    </div>
+               </div>
+               <div class="r my" id="ms">
+                    <div class="c-1">
+                         <h3 style="width: 100%" id="gn">Members</h3>
+                         <ul id="gm" class="l"></ul>
+                    </div>
+                    <div class="c-3">
+                         <h3 style="width: 100%">Messages</h3>
+                         <ul id="m" class="l"></ul>
+                    </div>
+               </div>
+          </div>
+          <form id="form" style="display: none">
+               <input type="file" id="file" />
+          </form>
+          <div id="snackbar">Some text some message..</div>
+     </body>
+</html>

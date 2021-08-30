@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("./css/font-awesome.css");
+* {
+     padding: 0;
+     margin: 0;
+     box-sizing: border-box;
+}
+body {
+     font-family: "Lato", sans-serif;
+}
+/*
+ * nav
+ */
+nav {
+     color: #fff;
+     background-color: #ee6e73;
+     width: 100%;
+     display: flex;
+     flex-direction: row;
+     align-items: flex-start;
+     padding: 0;
+}
+nav a {
+     display: block;
+     transition: background-color 0.3s;
+     font-size: 1rem;
+     color: #fff;
+     display: block;
+     padding: 15px;
+     cursor: pointer;
+     width: 120px;
+     text-decoration: none;
+     text-align: center;
+}
+nav a:hover {
+     background-color: #e53935;
+}
+.brand {
+     width: 200px;
+     font-weight: 700;
+}
+nav a.icon {
+     display: none;
+     width: 50px;
+}
+/*
+ * Card
+ */
+.card {
+     margin: 0.5rem 2rem 1rem 2rem;
+     background-color: #546e7a !important;
+
+     border-radius: 4px;
+}
+.card-content {
+     padding: 24px;
+     border-radius: 0 0 2px 2px;
+     color: #fff !important;
+}
+.card-content p {
+     margin-bottom: 1rem;
+     margin-top: 2rem;
+}
+.card-title {
+     display: block;
+     line-height: 32px;
+     margin-bottom: 8px;
+     font-size: 1.75rem;
+     padding-bottom: 8px;
+     border-bottom: 1px solid rgba(160, 160, 160, 0.2);
+}
+/*
+ * Form input
+ */
+.input {
+     width: 80%;
+     padding: 0.5em 0.75em;
+     margin: 10px 0;
+     border: none;
+     border-bottom: 1px solid rgba(147, 128, 108, 0.25);
+}
+.btn {
+     color: #fff;
+     background-color: #26a69a;
+     padding: 0.5em 0.75em;
+
+     font-weight: normal;
+     border-radius: 4px;
+     border: 1px solid rgba(147, 128, 108, 0.25);
+     margin-left: 0;
+}
+/*
+ * Layout
+ */
+.container {
+     width: calc(100% - 5rem);
+     margin: 0 auto;
+}
+.r {
+     display: flex;
+     flex-direction: row;
+     justify-content: flex-start;
+     align-items: flex-start;
+     width: 100%;
+     margin: 0;
+     padding: 0.25rem;
+}
+.c-1 {
+     width: calc(100% / 4);
+}
+.c-2 {
+     width: calc((100% * 2) / 4);
+}
+.c-3 {
+     width: calc((100% * 3) / 4);
+}
+.c-4 {
+     width: 100%;
+}
+.mt {
+  margin-top: 1rem;
+}
+.my {
+  margin-top: .5rem;
+  margin-top: .5rem;
+}
+/*
+ * List
+ */
+ .l {
+  
+    
+  padding-left: 0;
+  margin: 0 auto;
+  width: 100%;
+  list-style: none;
+ 
+}
+.l-i {
+  
+ 
+  padding: .75rem 1.25rem;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.125);
+  width: calc( 100% - 2.5rem);
+}
+.l-i.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #26a69a;;
+  border-color: rgba(0,0,0,.125)
+}
+.l-i:first-child {
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  width: calc( 100% - 2.5rem);
+}
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+     visibility: hidden; /* Hidden by default. Visible on click */
+     min-width: 250px; /* Set a default minimum width */
+     margin-left: -125px; /* Divide value of min-width by 2 */
+     background-color: #333; /* Black background color */
+     color: #fff; /* White text color */
+     text-align: center; /* Centered text */
+     border-radius: 2px; /* Rounded borders */
+     padding: 16px; /* Padding */
+     position: fixed; /* Sit on top of the screen */
+     z-index: 2; /* Add a z-index if needed */
+     left: 50%; /* Center the snackbar */
+     bottom: 30px; /* 30px from the bottom */
+   }
+   
+   /* Show the snackbar when clicking on a button (class added with JavaScript) */
+   #snackbar.show {
+     visibility: visible; /* Show the snackbar */
+     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+     However, delay the fade out process for 2.5 seconds */
+     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+     animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   }
+   
+   /* Animations to fade the snackbar in and out */
+   @-webkit-keyframes fadein {
+     from {bottom: 0; opacity: 0;}
+     to {bottom: 30px; opacity: 1;}
+   }
+   
+   @keyframes fadein {
+     from {bottom: 0; opacity: 0;}
+     to {bottom: 30px; opacity: 1;}
+   }
+   
+   @-webkit-keyframes fadeout {
+     from {bottom: 30px; opacity: 1;}
+     to {bottom: 0; opacity: 0;}
+   }
+   
+   @keyframes fadeout {
+     from {bottom: 30px; opacity: 1;}
+     to {bottom: 0; opacity: 0;}
+   }
+@media only screen and (max-width: 600px) {
+     nav {
+          color: #fff;
+          background-color: #ee6e73;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 0;
+     }
+     nav a:not(:first-child) {
+          display: none;
+     }
+     nav a.icon {
+          z-index: 99;
+          display: block;
+          width: 50px;
+          position: fixed;
+          right: 0;
+          top: 0;
+     }
+     nav.responsive a:not(.icon) {
+          display: block;
+          width: 100%;
+     }
+     .brand {
+          width: 100%;
+     }
+     .r {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          padding: .2rem;
+          
+      }
+      .c-1 {
+          width: 100%;
+          margin-bottom: 5px;
+      }
+      .c-2 {
+         width: 100%;
+         margin-bottom: 5px;
+     }
+     .c-3 {
+         width: 100%;
+         margin-bottom: 5px;
+     }
+     .c-4 {
+         width: 100%;
+         margin-bottom: 5px;
+     }
+}

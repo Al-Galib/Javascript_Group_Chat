@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chat NodeJS App</title>
+        <link rel="stylesheet" href="./styles/style.css">
+        <script src="./scripts/jquery.js"></script>
+        <script>
+            $(document).ready(()=>{
+                $('#trigger').click(()=>{
+                
+                    $('#nav').toggleClass('responsive');
+                });
+            })
+        </script>
+    </head>
+    <body>
+        <nav id="nav">
+            
+            <a href="./index.html" class="brand">Chat: Socket.io</a>
+            <a href="javascript:void(0)" class="icon"><i class="fa fa-bars" id="trigger"></i></a>
+            <a href="./index.html">Home</a>
+           
+            <a href="./chatui.html">Chat</a>
+        </nav>
+        <div class="card ">
+            <div class="card-content">
+              <span class="card-title">Group Chat Application</span>
+              <p>Uses express web framework and socket.io</p>
+              <p>Supports sharing image, video, most file types </p>
+            </div>
+           
+          </div>
+         
+          <input class="input" placeholder="message"/>
+          <input type="button" value="Send" class="btn" />
+    </body>
+</html>
